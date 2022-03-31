@@ -29,7 +29,7 @@ def CountSquareDist(point, count):
 
 
 beams = [(1, 0), (2, 1), (3, 2), (1, 1), (2, 3), (1, 2), (0, 1), (-1, 2), (-2, 3), (-1, 1), (-3, 2), (-2, 1), (3, 4),
-         (-3, 4), (4, 3), (-4, 3), (1, 3)]
+         (-3, 4), (4, 3), (-4, 3), (1, 3), (3, 1), (-1, 3), (-3, 1)]
 
 
 class Field:
@@ -42,6 +42,7 @@ class Field:
         self.minY = 0
         self.maxIterations = 15
         self.allBeams = [(beams[i], (-beams[i][0], -beams[i][1])) for i in range(len(beams))]
+        self.lowerBound = 700
 
     def IsAvailable(self, point):
         if not (self.minX <= point.x <= self.maxX and self.minY <= point.y <= self.maxY):
@@ -65,8 +66,8 @@ class Field:
                 while not IsBadPoint(tempPoint) and counter[i] <= 20:
                     tempPoint = self.GoDeep(tempPoint, beamPair[i])
                     counter[i] += 1
-            if CountSquareDist(Point(beamPair[0]), counter[0]) >= 450 and CountSquareDist(Point(beamPair[1]),
-                                                                                          counter[1]) >= 450:
+            if CountSquareDist(Point(beamPair[0]), counter[0]) >= self.lowerBound and CountSquareDist(Point(beamPair[1]),
+                                                                                          counter[1]) >= self.lowerBound:
                 linesCount += 1
             if linesCount >= 2:
                 return True
@@ -98,8 +99,8 @@ class Solve:
         if self.pointArea[x][y] == 0 or self.marked[x][y] == 1:
             return
         self.marked[x][y] = 1
-        for d1 in range(-1, 2, 1):
-            for d2 in range(-1, 2, 1):
+        for d1 in range(-2, 3, 1):
+            for d2 in range(-2, 3, 1):
                 if 0 == d2 and d1 == 0:
                     continue
                 self.MarkNeighbours(Point((x + d1, y + d2)))
@@ -111,6 +112,7 @@ class Solve:
             x = point.x
             y = point.y
             if self.marked[x][y] == 0:
+                print(point.x, point.y)
                 countIntesections += 1
                 self.MarkNeighbours(point)
         return countIntesections
