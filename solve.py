@@ -65,8 +65,8 @@ class Field:
                 while not IsBadPoint(tempPoint) and counter[i] <= 20:
                     tempPoint = self.GoDeep(tempPoint, beamPair[i])
                     counter[i] += 1
-            if CountSquareDist(Point(beamPair[0]), counter[0]) >= 400 and CountSquareDist(Point(beamPair[1]),
-                                                                                          counter[1]) >= 400:
+            if CountSquareDist(Point(beamPair[0]), counter[0]) >= 450 and CountSquareDist(Point(beamPair[1]),
+                                                                                          counter[1]) >= 450:
                 linesCount += 1
             if linesCount >= 2:
                 return True
@@ -111,7 +111,6 @@ class Solve:
             x = point.x
             y = point.y
             if self.marked[x][y] == 0:
-                print(point.x, point.y)
                 countIntesections += 1
                 self.MarkNeighbours(point)
         return countIntesections
